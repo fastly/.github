@@ -6,10 +6,10 @@ Across all kinds of organizations, we help make apps, websites and connected dev
 
 At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technology is built on open-source code, and we use and contribute to the open source technologies and open internet standards that make the modern internet.
 
-➡️ [Learn more about our open source projects](https://developer.fastly.com/community/open-source)
+➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**
 
 ## Fast forward
 
 To nurture and support those who share our vision of an open internet that is fast and secure for all, we extend free services to eligible open source projects and nonprofits that support them.
 
-➡️ [Read about our Fast-Forward program](https://www.fastly.com/fast-forward)
+➡️ **[Read about our Fast-Forward program](https://www.fastly.com/fast-forward)**
