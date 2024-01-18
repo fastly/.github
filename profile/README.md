@@ -8,7 +8,7 @@ At Fastly, open source is a part of our heritage, essential to our operations, a
 
 ➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**
 
-We power [GitHub Pages](https://pages.github.com/), the [Linux Foundation](https://www.linuxfoundation.org/), downloads of [cURL](https://curl.se/), registries like [RubyGems](https://rubygems.org/) and [PyPi](https://pypi.org/), and public CDNs like [JSDelivr](https://www.jsdelivr.com/) and [polyfill.io](https://polyfill.io).
+We power [GitHub Pages](https://pages.github.com/), the [Linux Foundation](https://www.linuxfoundation.org/), downloads of [cURL](https://curl.se/), registries like [RubyGems](https://rubygems.org/) and [PyPi](https://pypi.org/), public CDNs like [JSDelivr](https://www.jsdelivr.com/) and [polyfill.io](https://polyfill.io), and much more.
 
 ## Fast Forward
 
