@@ -13,6 +13,3 @@ At Fastly, open source is a part of our heritage, essential to our operations, a
 To nurture and support those who share our vision of an open internet that is fast and secure for all, we extend free services to eligible open source projects and nonprofits that support them.
 
 ➡️ [Read about our Fast-Forward program](https://www.fastly.com/fast-forward)
-
---
-
