@@ -2,7 +2,7 @@
 
 **Fastly empowers everyone to build the good internet together.**
 
-We're the internet's pipes. With products and features ranging from DDoS and bot protection to caching and edge computing, we help make apps, websites, and connected devices faster, safer, and more engaging.  We're BFFs with your refrigerator and your favorite news site.
+With features ranging from DDoS and bot protection to caching and edge computing, we help make apps, websites, and connected devices faster, safer, and more engaging.  We're BFFs with your refrigerator and your favorite news site.
 
 At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the open source technologies and open internet standards that make the modern internet. 
 
