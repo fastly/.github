@@ -4,13 +4,11 @@
 
 With features ranging from DDoS and bot protection to caching and edge computing, we help make apps, websites, and connected devices faster, safer, and more engaging.  We're BFFs with your refrigerator and your favorite news site.
 
-At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the open source technologies and open internet standards that make the modern internet. 
+At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the software and open internet standards that make the modern internet. 
 
 ➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**
 
-We power [GitHub Pages](https://pages.github.com/), the [Linux Foundation](https://www.linuxfoundation.org/), downloads of [cURL](https://curl.se/), registries like [RubyGems](https://rubygems.org/) and [PyPi](https://pypi.org/), and public CDNs like [JSDelivr](https://www.jsdelivr.com/) and [polyfill.io](https://polyfill.io). Ready to see how Fastly can help make your site more performant, secure, and reduce its environmental impact?
-
-➡️ **[Let's build something amazing.](https://developer.fastly.com/#tachotest)**
+We power [GitHub Pages](https://pages.github.com/), the [Linux Foundation](https://www.linuxfoundation.org/), downloads of [cURL](https://curl.se/), registries like [RubyGems](https://rubygems.org/) and [PyPi](https://pypi.org/), and public CDNs like [JSDelivr](https://www.jsdelivr.com/) and [polyfill.io](https://polyfill.io).
 
 ## Fast Forward
 
