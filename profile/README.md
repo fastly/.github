@@ -1,6 +1,6 @@
 Hi 👋, we're Fastly.
 
-![A montage of Fastly contributors made using Imagemagick](https://github.com/fastly/.github/blob/main/images/fastlyans.png) 
+![A montage of Fastly contributors made using Imagemagick](https://github.com/fastly/.github/blob/main/images/montage.png) 
 
 **Fastly empowers everyone to build the good internet together.**
 
