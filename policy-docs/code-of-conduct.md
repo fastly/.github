@@ -52,7 +52,7 @@ The Fastly OSS governance group will receive and evaluate incident reports from 
 
 If a participant engages in behavior that violates this Code of Conduct, the Fastly OSS governance group may take any action they deem appropriate, including warning the offender or expulsion from the community and community events with no refund of event tickets or other participation fees. 
 
-To make a report, see [reporting and enforcement procedures](#todo)
+To make a report, see [reporting and enforcement procedures](./reporting-and-enforcement.md)
 
 Thank you for helping make this a welcoming, friendly community for everyone.
 
