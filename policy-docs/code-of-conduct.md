@@ -1,3 +1,5 @@
+# Code of conduct
+
 Fastly’s community is made up of builders at the cutting edge, dreamers who create technology that people all over the world enjoy or rely on every day. As such, we believe it’s our responsibility to nurture, protect, and inspire everyone who builds on or interacts with Fastly’s technology. What’s more, we believe the experience of building and using the internet is better when our community is open, inclusive, friendly, and trustworthy. This Code of Conduct outlines how we expect people to behave in Fastly’s community so we can build the future of the web — together.
 
 ## Scope
