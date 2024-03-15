@@ -1,4 +1,6 @@
-This document describes the procedures the Fastly OSS governance group uses to enforce the Code of Conduct.
+# Reporting and enforcement process
+
+This document describes the procedures the Fastly OSS governance group uses to enforce the [Code of Conduct](./code-of-conduct.md).
 
 Fastly’s OSS governance group exists to help people work and build things together, and the Code of Conduct exists to help people be and feel safe in our physical and digital spaces. As such, our community should feel safe making Code of Conduct violation reports no matter the severity of the infraction. We will take strong action when needed. When it’s not, we will help people understand how to better engage in the community.
 
@@ -21,7 +23,7 @@ When the group receives a report of a possible Code of Conduct violation, it wil
 
 ## Making a report
 
-The best way to contact the Fastly OSS governance group is by email at **<oss-governance@fastly.com>**. 
+The best way to contact the Fastly OSS governance group is by email, to **<oss-governance@fastly.com>**. 
 
 Review [Fastly’s Privacy Policy](https://www.fastly.com/privacy/).
 
@@ -29,7 +31,7 @@ Review [Fastly’s Privacy Policy](https://www.fastly.com/privacy/).
 
 When you make a report via email or phone, please include:
 
-* Your contact info (so we can get in touch with you if we need to follow up)
+* Your contact information (so we can get in touch with you if we need to follow up)
 * Date and time of the incident
 * Location of incident
 * Whether the incident is ongoing
@@ -48,7 +50,7 @@ However, some incidents happen in one-on-one interactions, and even if the detai
 
 In some cases we may determine that a public statement is necessary. If that’s the case, the identities of all victims and reporters will remain confidential unless those individuals instruct us otherwise.
 
-### Report handling procedure
+## Report handling procedure
 
 When you make a report to the governance group, we will gather information about the incident.
 
@@ -56,13 +58,11 @@ If the incident is ongoing and needs to be immediately addressed, the governance
 
 If the incident is less urgent, the report will be discussed by the governance group to determine an appropriate response.
 
-## Acknowledge the report
-
-Reporters should receive an emailed acknowledgment of the receipt of their report within 24 hours. Upon receipt of the report, any group members with a conflict of interest will immediately recuse themselves from discussions.
+Reporters should receive an emailed acknowledgment of the receipt of their report within 24 hours. 
 
 ### Conflict of interest policy
 
-Examples of conflicts of interest include:
+Upon receipt of the report, any group members with a conflict of interest will immediately recuse themselves from discussions.  Examples of conflicts of interest include:
 
  * The reporter or reported person is your manager or direct report.
  * You are related to, are romantically connected with, or have a close platonic relationship with either the reporter or the reported person. 
@@ -96,7 +96,7 @@ The Fastly OSS governance group will consider the following questions in conside
 
 Reports which involve higher risk or higher impact may face more severe consequences than reports which involve lower risk or lower impact.
 
-## Propose actions and consequences
+## Proposing actions and consequences
 
 The group will determine a concrete behavioral modification plan that ensures the inappropriate behavior is not repeated.  The group will also discuss what actions may need to be taken if the reported person does not agree to the behavioral modification plan.
 
@@ -151,16 +151,16 @@ Information and discussion relating to reports may exist in email systems and gr
 * Jenn Schiffer — Director of Community (Product)
 * Elize Selvarajah — Director (Engineering)
 
-### OSS governance advisory group
+## OSS governance advisory group
 
 Advisers to the Fastly OSS governance group have access to the work group mailing list, but are not voting members. The advisory group is Fastly’s senior leadership team. 
 
-### License
+## License
 
 This Code of Conduct is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/).
 
 [![Creative Commons License](https://licensebuttons.net/l/by-sa/3.0/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/)
 
-### Attributions
+## Attributions
 
 This document is based on the excellent [Python Software Foundation CoC](https://www.python.org/psf/conduct/) which itself is derived from the [Geek Feminism wiki, created by the Ada Initiative and other volunteers](http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy), updated by Sage Sharp of [Otter Tech](https://otter.technology/code-of-conduct-training/) and incorporates prior work by many other communities, including procedures from [PyCon US & the Django Project’s reporter guidelines](https://www.djangoproject.com/conduct/reporting/). It has been adapted and updated to suit the Fastly community by Andrew Betts and Hannah Aubry.
