@@ -8,7 +8,7 @@ With features ranging from DDoS and bot protection to caching and edge computing
 
 At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the software and open internet standards that make the modern internet.
 
-➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**
+➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**<br>
 ➡️ **[Read our code of conduct and business policies](https://github.com/fastly/.github)**
 
 ## Fast Forward
