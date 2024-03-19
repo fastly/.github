@@ -6,9 +6,10 @@ Hi 👋, we're Fastly.
 
 With features ranging from DDoS and bot protection to caching and edge computing, we help make apps, websites, and connected devices faster, safer, and more engaging.  We power [GitHub Pages](https://pages.github.com/), the [Linux Foundation](https://www.linuxfoundation.org/), downloads of [cURL](https://curl.se/), registries like [RubyGems](https://rubygems.org/) and [PyPi](https://pypi.org/), public CDNs like [JSDelivr](https://www.jsdelivr.com/), and much more. We're BFFs with your refrigerator and your favorite news site.
 
-At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the software and open internet standards that make the modern internet. [Read our code of business conduct and ethics](https://www.fastly.com/code-of-business-conduct-and-ethics/).
+At Fastly, open source is a part of our heritage, essential to our operations, and central to our future.  Our core technologies are built on open-source code, and we use and contribute to the software and open internet standards that make the modern internet.
 
-➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**
+➡️ **[Learn more about our open source projects](https://developer.fastly.com/community/open-source)**<br>
+➡️ **[Read our code of conduct and business policies](https://github.com/fastly/.github)**
 
 ## Fast Forward
 
