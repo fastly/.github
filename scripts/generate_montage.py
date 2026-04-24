@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Generate a photomosaic of the Fastly tachometer logo from Fastly GitHub org member avatars.
 
-Each avatar is used exactly once, with no modifications. The logo emerges subtly
-from strategic placement of brighter vs darker avatars.
+Only members whose org membership is public are included. Each avatar is used
+exactly once, with no modifications. The logo emerges subtly from strategic
+placement of brighter vs darker avatars.
 """
 
+import json
 import math
 import os
 import random
+import re
+import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -27,25 +31,21 @@ BG_COLOR = (255, 255, 255)
 
 
 def fetch_members():
-    """Fetch public org members using the GitHub API without authentication."""
-    members = []
-    url = "https://api.github.com/orgs/fastly/public_members"
-    params = {"per_page": 100}
-    while url:
-        resp = requests.get(url, params=params)
-        resp.raise_for_status()
-        data = resp.json()
-        for m in data:
-            members.append({"login": m["login"], "avatar_url": m["avatar_url"]})
-        # Follow pagination via Link header
-        url = None
-        params = {}
-        link = resp.headers.get("Link", "")
-        for part in link.split(","):
-            if 'rel="next"' in part:
-                url = part.split(";")[0].strip().strip("<>")
-        print(f"  Fetched {len(members)} public members so far...")
-    print(f"Total public members: {len(members)}")
+    """Fetch public org members via gh CLI."""
+    print("Fetching public members...")
+    result = subprocess.run(
+        ["gh", "api", "/orgs/fastly/public_members", "--paginate"],
+        capture_output=True, text=True, check=True,
+    )
+    raw = result.stdout.strip()
+    try:
+        members = json.loads(raw)
+    except json.JSONDecodeError:
+        members = []
+        arrays = re.findall(r'\[.*?\]', raw, re.DOTALL)
+        for arr in arrays:
+            members.extend(json.loads(arr))
+    print(f"  Found {len(members)} public members")
     return [(m["login"], m["avatar_url"]) for m in members]
 
 
