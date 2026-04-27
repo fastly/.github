@@ -51,6 +51,7 @@ def fetch_members():
 
 def download_avatar(login, avatar_url):
     """Download a single avatar."""
+    AVATAR_DIR.mkdir(parents=True, exist_ok=True)
     path = AVATAR_DIR / f"{login}.png"
     if path.exists():
         return path
