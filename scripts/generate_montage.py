@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Generate a photomosaic of the Fastly tachometer logo from Fastly GitHub org member avatars.
 
-Only members whose org membership is public are included. Each avatar is used
-exactly once, with no modifications. The logo emerges subtly from strategic
-placement of brighter vs darker avatars.
+All org members visible to the token are included. Public members' avatars are
+used as-is; private members' avatars are Gaussian-blurred to protect their
+privacy. The logo emerges subtly from strategic placement of brighter vs darker
+avatars.
 """
 
 import json
@@ -17,12 +18,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import requests
-from PIL import Image
+from PIL import Image, ImageFilter
 
 # --- Config ---
 TILE_SIZE = 40
 GRID_COLS = 30
-GRID_ROWS = 12
+GRID_ROWS = 17
 SCRIPT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
 LOGO_PATH = SCRIPT_DIR / "fastly-wordmark.png"
 AVATAR_DIR = Path("/tmp/montage-avatars")
@@ -30,23 +31,47 @@ OUTPUT_PATH = SCRIPT_DIR / ".." / "images" / "montage.png"
 BG_COLOR = (255, 255, 255)
 
 
-def fetch_members():
-    """Fetch public org members via gh CLI."""
-    print("Fetching public members...")
-    result = subprocess.run(
-        ["gh", "api", "/orgs/fastly/public_members", "--paginate"],
-        capture_output=True, text=True, check=True,
-    )
-    raw = result.stdout.strip()
+def _parse_gh_api_response(raw):
+    """Parse a (possibly concatenated) JSON array response from gh api --paginate."""
     try:
-        members = json.loads(raw)
+        return json.loads(raw)
     except json.JSONDecodeError:
         members = []
         arrays = re.findall(r'\[.*?\]', raw, re.DOTALL)
         for arr in arrays:
             members.extend(json.loads(arr))
-    print(f"  Found {len(members)} public members")
-    return [(m["login"], m["avatar_url"]) for m in members]
+        return members
+
+
+def fetch_members():
+    """Fetch all org members, tracking which ones have public membership."""
+    # First, fetch public members to build a set of public logins
+    print("Fetching public members...")
+    result = subprocess.run(
+        ["gh", "api", "/orgs/fastly/public_members", "--paginate"],
+        capture_output=True, text=True, check=True,
+    )
+    public_members = _parse_gh_api_response(result.stdout.strip())
+    public_logins = {m["login"] for m in public_members}
+    print(f"  Found {len(public_logins)} public members")
+
+    # Then, fetch ALL members (requires org:read scope on the token)
+    print("Fetching all org members...")
+    result = subprocess.run(
+        ["gh", "api", "/orgs/fastly/members", "--paginate"],
+        capture_output=True, text=True, check=True,
+    )
+    all_members = _parse_gh_api_response(result.stdout.strip())
+    print(f"  Found {len(all_members)} total members")
+
+    members = [
+        (m["login"], m["avatar_url"], m["login"] in public_logins)
+        for m in all_members
+    ]
+    n_public = sum(1 for _, _, is_pub in members if is_pub)
+    n_private = len(members) - n_public
+    print(f"  {n_public} public, {n_private} private")
+    return members
 
 
 def download_avatar(login, avatar_url):
@@ -63,18 +88,23 @@ def download_avatar(login, avatar_url):
 
 
 def download_all(members):
-    """Download all avatars with thread pool."""
+    """Download all avatars with thread pool.
+
+    Returns {login: (path, is_public)}.
+    """
     print(f"Downloading avatars (up to {len(members)})...")
     done = 0
     total = len(members)
     paths = {}
+    # Build a lookup for is_public by login
+    public_map = {login: is_public for login, _url, is_public in members}
     with ThreadPoolExecutor(max_workers=10) as pool:
-        futures = {pool.submit(download_avatar, login, url): login for login, url in members}
+        futures = {pool.submit(download_avatar, login, url): login for login, url, _is_public in members}
         for fut in as_completed(futures):
             login = futures[fut]
             done += 1
             try:
-                paths[login] = fut.result()
+                paths[login] = (fut.result(), public_map[login])
             except Exception as e:
                 print(f"  Failed {login}: {e}")
             if done % 50 == 0 or done == total:
@@ -110,15 +140,18 @@ def _dominant_color_ratio(img, top_n=3):
 
 
 def filter_identicons(paths):
-    """Filter out default/identicon avatars using multiple heuristics."""
+    """Filter out default/identicon avatars using multiple heuristics.
+
+    Accepts and returns {login: (path, is_public)}.
+    """
     usable = {}
     removed = 0
     reasons = {"low_colors": 0, "low_entropy": 0, "dominant_colors": 0}
-    for login, path in paths.items():
+    for login, (path, is_public) in paths.items():
         try:
             img = Image.open(path).convert("RGB").resize((32, 32))
             unique_colors = len(set(img.getdata()))
-            if unique_colors < 200:
+            if unique_colors < 50:
                 removed += 1
                 reasons["low_colors"] += 1
                 continue
@@ -132,7 +165,7 @@ def filter_identicons(paths):
                 removed += 1
                 reasons["dominant_colors"] += 1
                 continue
-            usable[login] = path
+            usable[login] = (path, is_public)
         except Exception:
             removed += 1
     print(f"Filtered: {len(usable)} usable, {removed} identicons removed")
@@ -175,10 +208,17 @@ def compute_grid_size(n_avatars):
 
 
 def generate_mosaic(avatar_paths):
-    """Generate photomosaic: avatars placed unmodified, positioned to hint at the logo."""
+    """Generate photomosaic: avatars positioned to hint at the logo.
+
+    Private members' avatars are Gaussian-blurred for privacy.
+    Accepts {login: (path, is_public)}.
+    """
     print("Generating photomosaic...")
 
     n_avatars = len(avatar_paths)
+    n_public = sum(1 for _, is_pub in avatar_paths.values() if is_pub)
+    n_private = n_avatars - n_public
+    print(f"  Including {n_public} public and {n_private} private (blurred) members")
     rows, cols = GRID_ROWS, GRID_COLS
     total_cells = rows * cols
     empty_cells = total_cells - n_avatars
@@ -204,10 +244,12 @@ def generate_mosaic(avatar_paths):
 
     # Load avatars and compute their brightness
     print("  Loading and measuring avatars...")
-    avatar_data = []  # list of (path, brightness, tile_image)
-    for login, path in avatar_paths.items():
+    avatar_data = []  # list of (login, brightness, tile_image)
+    for login, (path, is_public) in avatar_paths.items():
         try:
             img = Image.open(path).convert("RGB").resize((TILE_SIZE, TILE_SIZE), Image.LANCZOS)
+            if not is_public:
+                img = img.filter(ImageFilter.GaussianBlur(radius=10))
             b = compute_brightness(img)
             avatar_data.append((login, b, img))
         except Exception as e:
