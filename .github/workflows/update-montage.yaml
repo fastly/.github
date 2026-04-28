@@ -1,0 +1,61 @@
+name: Update member montage
+
+on:
+  schedule:
+    - cron: "0 9 * * MON"
+  repository_dispatch:
+    types: [update-montage]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pillow requests
+
+      - name: Generate montage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/generate_montage.py
+
+      - name: Open PR if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet images/montage.png; then
+            echo "No changes to montage"
+            exit 0
+          fi
+
+          BRANCH="chore/update-montage"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add images/montage.png
+          git commit -m "chore: regenerate member montage"
+          git push --force origin "$BRANCH"
+
+          # Create PR if one doesn't already exist for this branch
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            gh pr create \
+              --title "chore: regenerate member montage" \
+              --body "Automated update of the org member photomosaic." \
+              --head "$BRANCH" \
+              --base main
+          else
+            echo "PR #$EXISTING already exists, updated branch"
+          fi
