@@ -139,38 +139,40 @@ def _dominant_color_ratio(img, top_n=3):
     return sum(top_counts) / total
 
 
-def filter_identicons(paths):
-    """Filter out default/identicon avatars using multiple heuristics.
+def detect_identicons(paths):
+    """Detect default/identicon avatars using multiple heuristics.
 
-    Accepts and returns {login: (path, is_public)}.
+    Accepts {login: (path, is_public)}.
+    Returns {login: (path, is_public, is_identicon)}.
+    Identicons are kept but marked for blurring.
     """
-    usable = {}
-    removed = 0
+    result = {}
+    detected = 0
     reasons = {"low_colors": 0, "low_entropy": 0, "dominant_colors": 0}
     for login, (path, is_public) in paths.items():
+        is_identicon = False
         try:
             img = Image.open(path).convert("RGB").resize((32, 32))
             unique_colors = len(set(img.getdata()))
-            if unique_colors < 50:
-                removed += 1
+            if unique_colors < 150:
+                detected += 1
                 reasons["low_colors"] += 1
-                continue
-            entropy = _color_entropy(img)
-            if entropy < 4.0:
-                removed += 1
+                is_identicon = True
+            elif (entropy := _color_entropy(img)) < 5.0:
+                detected += 1
                 reasons["low_entropy"] += 1
-                continue
-            dom_ratio = _dominant_color_ratio(img)
-            if dom_ratio >= 0.90:
-                removed += 1
+                is_identicon = True
+            elif (dom_ratio := _dominant_color_ratio(img)) >= 0.65:
+                detected += 1
                 reasons["dominant_colors"] += 1
-                continue
-            usable[login] = (path, is_public)
+                is_identicon = True
         except Exception:
-            removed += 1
-    print(f"Filtered: {len(usable)} usable, {removed} identicons removed")
-    print(f"  Removal breakdown: {reasons}")
-    return usable
+            is_identicon = True
+            detected += 1
+        result[login] = (path, is_public, is_identicon)
+    print(f"Detected: {detected} identicons out of {len(result)} members (will be blurred)")
+    print(f"  Detection breakdown: {reasons}")
+    return result
 
 
 def compute_brightness(img):
@@ -210,15 +212,16 @@ def compute_grid_size(n_avatars):
 def generate_mosaic(avatar_paths):
     """Generate photomosaic: avatars positioned to hint at the logo.
 
-    Private members' avatars are Gaussian-blurred for privacy.
-    Accepts {login: (path, is_public)}.
+    Private members' and identicon avatars are Gaussian-blurred for privacy.
+    Accepts {login: (path, is_public, is_identicon)}.
     """
     print("Generating photomosaic...")
 
     n_avatars = len(avatar_paths)
-    n_public = sum(1 for _, is_pub in avatar_paths.values() if is_pub)
+    n_public = sum(1 for _, is_pub, _ident in avatar_paths.values() if is_pub)
+    n_identicon = sum(1 for _, _pub, is_ident in avatar_paths.values() if is_ident)
     n_private = n_avatars - n_public
-    print(f"  Including {n_public} public and {n_private} private (blurred) members")
+    print(f"  Including {n_public} public, {n_private} private (blurred), {n_identicon} identicons (blurred)")
     rows, cols = GRID_ROWS, GRID_COLS
     total_cells = rows * cols
     empty_cells = total_cells - n_avatars
@@ -245,10 +248,10 @@ def generate_mosaic(avatar_paths):
     # Load avatars and compute their brightness
     print("  Loading and measuring avatars...")
     avatar_data = []  # list of (login, brightness, tile_image)
-    for login, (path, is_public) in avatar_paths.items():
+    for login, (path, is_public, is_identicon) in avatar_paths.items():
         try:
             img = Image.open(path).convert("RGB").resize((TILE_SIZE, TILE_SIZE), Image.LANCZOS)
-            if not is_public:
+            if not is_public or is_identicon:
                 img = img.filter(ImageFilter.GaussianBlur(radius=10))
             b = compute_brightness(img)
             avatar_data.append((login, b, img))
@@ -325,8 +328,8 @@ def main():
     random.seed(42)
     members = fetch_members()
     paths = download_all(members)
-    usable = filter_identicons(paths)
-    generate_mosaic(usable)
+    marked = detect_identicons(paths)
+    generate_mosaic(marked)
     print("Done!")
 
 
