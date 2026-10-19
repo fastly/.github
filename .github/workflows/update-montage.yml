@@ -37,6 +37,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -ex
           if git diff --quiet images/montage.png; then
             echo "No changes to montage"
             exit 0
